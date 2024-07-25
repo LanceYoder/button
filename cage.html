@@ -127,12 +127,15 @@
 <script src="movieData.js"></script>
 <script>
     let totalDollars = 0;
-    const baseClickValue = 1; // Base value for each click
+    const baseClickValue = 1;
     const button = document.getElementById('myButton');
     const counterDisplay = document.getElementById('counter');
     const multiplierDisplay = document.getElementById('multiplier');
     const tableBody = document.querySelector('#movieTable tbody');
     const purchaseNotification = document.getElementById('purchaseNotification');
+
+    // Reorder movieData from cheapest to most expensive
+    movieData.sort((a, b) => a.costToPurchase - b.costToPurchase);
 
     function formatMoney(amount) {
         return '$' + amount.toLocaleString();
@@ -153,10 +156,12 @@
                     <td>${formatMoney(movie.costToPurchase)}</td>
                     <td>${movie.multiplier.toLocaleString()}x</td>
                     <td>
-                        <div class="progress-bar">
-                            <span class="progress" style="width: ${progress}%"></span>
-                        </div>
-                        ${progress.toFixed(2)}%
+                        ${movie.purchased ? 'Purchased' : `
+                            <div class="progress-bar">
+                                <span class="progress" style="width: ${progress}%"></span>
+                            </div>
+                            ${progress.toFixed(2)}%
+                        `}
                     </td>
                     <td class="checkbox-cell">
                         <input type="checkbox" ${movie.purchased ? 'checked' : ''} 
@@ -221,6 +226,5 @@
     // Initial setup
     updateTable();
     updateMultiplierDisplay();
-</script>
-</body>
+</script></body>
 </html>
