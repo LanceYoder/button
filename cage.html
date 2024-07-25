@@ -7,15 +7,26 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 1200px;
-            margin: 0 auto;
+            margin: 0;
             padding: 20px;
             background-color: #f0f0f0;
         }
-        #container {
+        .game-container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .game-area {
+            flex: 0 0 300px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            padding-right: 20px;
+        }
+        .movie-list {
+            flex: 1;
+            overflow-y: auto;
+            max-height: 80vh;
         }
         #myButton {
             width: 200px;
@@ -35,7 +46,7 @@
         #myButton:active {
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
-        #counter {
+        #counter, #multiplier {
             margin-top: 20px;
             font-size: 24px;
             font-weight: bold;
@@ -51,7 +62,6 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
         }
         th, td {
             border: 1px solid #ddd;
@@ -61,6 +71,9 @@
         }
         th {
             background-color: #f2f2f2;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
         .progress-bar {
             width: 100%;
@@ -80,34 +93,44 @@
             background-color: #4CAF50;
             color: white;
         }
+        .checkbox-cell {
+            text-align: center;
+        }
     </style>
 </head>
 <body>
-<div id="container">
-    <button id="myButton" aria-label="Nick Cage Button"></button>
-    <div id="counter">Total Dollars: $0</div>
-    <div id="purchaseNotification"></div>
+<div class="game-container">
+    <div class="game-area">
+        <button id="myButton" aria-label="Nick Cage Button"></button>
+        <div id="counter">Total Dollars: $0</div>
+        <div id="multiplier">Multiplier: 1x</div>
+        <div id="purchaseNotification"></div>
+    </div>
+    <div class="movie-list">
+        <table id="movieTable">
+            <thead>
+                <tr>
+                    <th>Movie</th>
+                    <th>Year</th>
+                    <th>Cost to Purchase</th>
+                    <th>Multiplier</th>
+                    <th>Progress</th>
+                    <th>Purchase</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Movie rows will be inserted here -->
+            </tbody>
+        </table>
+    </div>
 </div>
-<table id="movieTable">
-    <thead>
-        <tr>
-            <th>Movie</th>
-            <th>Year</th>
-            <th>Cost to Purchase</th>
-            <th>Multiplier</th>
-            <th>Progress</th>
-            <th>Status</th>
-        </tr>
-    </thead>
-    <tbody>
-        <!-- Movie rows will be inserted here -->
-    </tbody>
-</table>
 <script src="movieData.js"></script>
 <script>
     let totalDollars = 0;
+    const baseClickValue = 1; // Base value for each click
     const button = document.getElementById('myButton');
     const counterDisplay = document.getElementById('counter');
+    const multiplierDisplay = document.getElementById('multiplier');
     const tableBody = document.querySelector('#movieTable tbody');
     const purchaseNotification = document.getElementById('purchaseNotification');
 
@@ -135,20 +158,29 @@
                         </div>
                         ${progress.toFixed(2)}%
                     </td>
-                    <td>${movie.purchased ? 'Purchased' : 'Not Purchased'}</td>
+                    <td class="checkbox-cell">
+                        <input type="checkbox" ${movie.purchased ? 'checked' : ''} 
+                               ${totalDollars < movie.costToPurchase ? 'disabled' : ''}
+                               onchange="togglePurchase(${index})">
+                    </td>
                 </tr>
             `;
             tableBody.insertAdjacentHTML('beforeend', row);
         });
     }
 
-    function checkPurchases() {
-        movieData.forEach((movie, index) => {
-            if (totalDollars >= movie.costToPurchase && !movie.purchased) {
-                movie.purchased = true;
-                showPurchaseNotification(movie.name);
-            }
-        });
+    function togglePurchase(index) {
+        const movie = movieData[index];
+        if (!movie.purchased && totalDollars >= movie.costToPurchase) {
+            totalDollars -= movie.costToPurchase;
+            movie.purchased = true;
+            showPurchaseNotification(movie.name);
+        } else if (movie.purchased) {
+            totalDollars += movie.costToPurchase;
+            movie.purchased = false;
+        }
+        counterDisplay.textContent = `Total Dollars: ${formatMoney(totalDollars)}`;
+        updateMultiplierDisplay();
         updateTable();
     }
 
@@ -160,22 +192,35 @@
         }, 2000);
     }
 
-    button.addEventListener('click', function() {
-        let totalIncrease = 0;
-        
+    function calculateMultiplier() {
+        let multiplierSum = 1; // Start at 1 to include the base multiplier
         movieData.forEach(movie => {
-            if (!movie.purchased) {
-                totalIncrease += movie.multiplier;
+            if (movie.purchased) {
+                multiplierSum += movie.multiplier;
             }
         });
-        
-        totalDollars += totalIncrease;
+        return multiplierSum;
+    }
+
+    function calculateClickValue() {
+        return baseClickValue * calculateMultiplier();
+    }
+
+    function updateMultiplierDisplay() {
+        const currentMultiplier = calculateMultiplier();
+        multiplierDisplay.textContent = `Multiplier: ${currentMultiplier.toLocaleString()}x`;
+    }
+
+    button.addEventListener('click', function() {
+        const clickValue = calculateClickValue();
+        totalDollars += clickValue;
         counterDisplay.textContent = `Total Dollars: ${formatMoney(totalDollars)}`;
-        checkPurchases();
+        updateTable();
     });
 
-    // Initial table setup
+    // Initial setup
     updateTable();
+    updateMultiplierDisplay();
 </script>
 </body>
 </html>
