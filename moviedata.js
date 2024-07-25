@@ -2,7 +2,7 @@ const movieData = [
     { name: "National Treasure", year: 2004, costToPurchase: 10000000, multiplier: 100000, purchased: false },
     { name: "National Treasure: Book of Secrets", year: 2007, costToPurchase: 7000000, multiplier: 4000, purchased: false },
     { name: "Ghost Rider", year: 2007, costToPurchase: 6666666, multiplier: 6666, purchased: false },
-    { name: "The Rock", year: 1996, costToPurchase: 500000, multiplier: 5000, purchased: false },
+    { name: "The Rock", year: 1996, costToPurchase: 5000000, multiplier: 5000, purchased: false },
     { name: "Con Air", year: 1997, costToPurchase: 3500000, multiplier: 3500, purchased: false },
     { name: "Face/Off", year: 1997, costToPurchase: 2000000, multiplier: 2000, purchased: false },
     { name: "Gone in 60 Seconds", year: 2000, costToPurchase: 1000000, multiplier: 1000, purchased: false },
