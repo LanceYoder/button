@@ -46,7 +46,7 @@
         #myButton:active {
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
-        #counter {
+        #counter, #multiplier {
             margin-top: 20px;
             font-size: 24px;
             font-weight: bold;
@@ -103,6 +103,7 @@
     <div class="game-area">
         <button id="myButton" aria-label="Nick Cage Button"></button>
         <div id="counter">Total Dollars: $0</div>
+        <div id="multiplier">Multiplier: 1x</div>
         <div id="purchaseNotification"></div>
     </div>
     <div class="movie-list">
@@ -129,6 +130,7 @@
     const baseClickValue = 1000; // Base value for each click
     const button = document.getElementById('myButton');
     const counterDisplay = document.getElementById('counter');
+    const multiplierDisplay = document.getElementById('multiplier');
     const tableBody = document.querySelector('#movieTable tbody');
     const purchaseNotification = document.getElementById('purchaseNotification');
 
@@ -178,6 +180,7 @@
             movie.purchased = false;
         }
         counterDisplay.textContent = `Total Dollars: ${formatMoney(totalDollars)}`;
+        updateMultiplierDisplay();
         updateTable();
     }
 
@@ -189,14 +192,23 @@
         }, 2000);
     }
 
-    function calculateClickValue() {
-        let multiplierSum = 0;
+    function calculateMultiplier() {
+        let multiplierSum = 1; // Start at 1 to include the base multiplier
         movieData.forEach(movie => {
             if (movie.purchased) {
                 multiplierSum += movie.multiplier;
             }
         });
-        return baseClickValue + multiplierSum;
+        return multiplierSum;
+    }
+
+    function calculateClickValue() {
+        return baseClickValue * calculateMultiplier();
+    }
+
+    function updateMultiplierDisplay() {
+        const currentMultiplier = calculateMultiplier();
+        multiplierDisplay.textContent = `Multiplier: ${currentMultiplier.toLocaleString()}x`;
     }
 
     button.addEventListener('click', function() {
@@ -206,8 +218,9 @@
         updateTable();
     });
 
-    // Initial table setup
+    // Initial setup
     updateTable();
+    updateMultiplierDisplay();
 </script>
 </body>
 </html>
