@@ -22,6 +22,7 @@
             flex-direction: column;
             align-items: center;
             padding-right: 20px;
+            position: relative;
         }
         .movie-list {
             flex: 1;
@@ -96,12 +97,25 @@
         .checkbox-cell {
             text-align: center;
         }
+        #multiplier-popup {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            font-weight: bold;
+            color: #ffcc00;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            opacity: 0;
+            transition: opacity 0.5s, transform 0.5s;
+        }
     </style>
 </head>
 <body>
 <div class="game-container">
     <div class="game-area">
         <button id="myButton" aria-label="Nick Cage Button"></button>
+        <div id="multiplier-popup"></div>
         <div id="counter">Total Dollars: $0</div>
         <div id="multiplier">Multiplier: 1x</div>
         <div id="purchaseNotification"></div>
@@ -174,18 +188,42 @@
         });
     }
 
+    let currentMultiplier = 1;
+
+    function updateMultiplierDisplay() {
+        const newMultiplier = calculateMultiplier();
+        if (newMultiplier !== currentMultiplier) {
+            showMultiplierPopup(newMultiplier);
+            currentMultiplier = newMultiplier;
+        }
+        multiplierDisplay.textContent = `Multiplier: ${newMultiplier.toLocaleString()}x`;
+    }
+
+    function showMultiplierPopup(newMultiplier) {
+        const popup = document.getElementById('multiplier-popup');
+        popup.textContent = `${newMultiplier}x`;
+        popup.style.opacity = '1';
+        popup.style.transform = 'translate(-50%, -50%) scale(1.5)';
+        
+        setTimeout(() => {
+            popup.style.opacity = '0';
+            popup.style.transform = 'translate(-50%, -50%) scale(1)';
+        }, 2000);
+    }
+
     function togglePurchase(index) {
         const movie = movieData[index];
         if (!movie.purchased && totalDollars >= movie.costToPurchase) {
             totalDollars -= movie.costToPurchase;
             movie.purchased = true;
             showPurchaseNotification(movie.name);
+            updateMultiplierDisplay();
         } else if (movie.purchased) {
             totalDollars += movie.costToPurchase;
             movie.purchased = false;
+            updateMultiplierDisplay();
         }
         counterDisplay.textContent = `Total Dollars: ${formatMoney(totalDollars)}`;
-        updateMultiplierDisplay();
         updateTable();
     }
 
@@ -211,11 +249,6 @@
         return baseClickValue * calculateMultiplier();
     }
 
-    function updateMultiplierDisplay() {
-        const currentMultiplier = calculateMultiplier();
-        multiplierDisplay.textContent = `Multiplier: ${currentMultiplier.toLocaleString()}x`;
-    }
-
     button.addEventListener('click', function() {
         const clickValue = calculateClickValue();
         totalDollars += clickValue;
@@ -226,5 +259,6 @@
     // Initial setup
     updateTable();
     updateMultiplierDisplay();
-</script></body>
+</script>
+</body>
 </html>
