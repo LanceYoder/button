@@ -93,7 +93,6 @@
         <tr>
             <th>Movie</th>
             <th>Year</th>
-            <th>Box Office</th>
             <th>Cost to Purchase</th>
             <th>Multiplier</th>
             <th>Progress</th>
@@ -104,56 +103,8 @@
         <!-- Movie rows will be inserted here -->
     </tbody>
 </table>
+<script src="movieData.js"></script>
 <script>
-    const movieData = [
-        { name: "National Treasure", year: 2004, boxOffice: 347500000, costToPurchase: 10000000, multiplier: 100000, purchased: false },
-        { name: "National Treasure: Book of Secrets", year: 2007, boxOffice: 459200000, costToPurchase: 7000000, multiplier: 4000, purchased: false },
-        { name: "Ghost Rider", year: 2007, boxOffice: 228700000, costToPurchase: 6666666, multiplier: 6666, purchased: false },
-        { name: "The Rock", year: 1996, boxOffice: 335100000, costToPurchase: 500000, multiplier: 5000, purchased: false },
-        { name: "Con Air", year: 1997, boxOffice: 224400000, costToPurchase: 3500000, multiplier: 3500, purchased: false },
-        { name: "Face/Off", year: 1997, boxOffice: 245700000, costToPurchase: 2000000, multiplier: 2000, purchased: false },
-        { name: "Gone in 60 Seconds", year: 2000, boxOffice: 237200000, costToPurchase: 1000000, multiplier: 1000, purchased: false },
-        { name: "Kick-Ass", year: 2010, boxOffice: 96200000, costToPurchase: 800000, multiplier: 750, purchased: false },
-        { name: "Raising Arizona", year: 1987, boxOffice: 29100000, costToPurchase: 450000, multiplier: 450, purchased: false },
-        { name: "Windtalkers", year: 2002, boxOffice: 77100000, costToPurchase: 400000, multiplier: 4, purchased: false },
-        { name: "Lord of War", year: 2005, boxOffice: 72600000, costToPurchase: 400000, multiplier: 375, purchased: false },
-        { name: "Snake Eyes", year: 1998, boxOffice: 103600000, costToPurchase: 350000, multiplier: 350, purchased: false },
-        { name: "The Wicker Man", year: 2006, boxOffice: 38800000, costToPurchase: 300000, multiplier: 275, purchased: false },
-        { name: "Season of the Witch", year: 2011, boxOffice: 68700000, costToPurchase: 250000, multiplier: 250, purchased: false },
-        { name: "Drive Angry", year: 2011, boxOffice: 36600000, costToPurchase: 220000, multiplier: 220, purchased: false },
-        { name: "The Croods", year: 2013, boxOffice: 587200000, costToPurchase: 200000, multiplier: 180, purchased: false },
-        { name: "Color Out of Space", year: 2019, boxOffice: 1300000, costToPurchase: 170000, multiplier: 165, purchased: false },
-        { name: "Sorcerer's Apprentice", year: 2010, boxOffice: 215300000, costToPurchase: 165000, multiplier: 150, purchased: false },
-        { name: "Zandalee", year: 1991, boxOffice: 1800000, costToPurchase: 150000, multiplier: 144, purchased: false },
-        { name: "The Trust", year: 2016, boxOffice: 84000, costToPurchase: 150000, multiplier: 140, purchased: false },
-        { name: "Joe", year: 2013, boxOffice: 1400000, costToPurchase: 135000, multiplier: 130, purchased: false },
-        { name: "The Weatherman", year: 2005, boxOffice: 23100000, costToPurchase: 130000, multiplier: 125, purchased: false },
-        { name: "Kick-Ass 2", year: 2013, boxOffice: 28700000, costToPurchase: 100000, multiplier: 120, purchased: false },
-        { name: "Matchstick Men", year: 2003, boxOffice: 33600000, costToPurchase: 80000, multiplier: 100, purchased: false },
-        { name: "Bangkok Dangerous", year: 2008, boxOffice: 38200000, costToPurchase: 45000, multiplier: 50, purchased: false },
-        { name: "Adaptation", year: 2002, boxOffice: 32200000, costToPurchase: 42000, multiplier: 45, purchased: false },
-        { name: "The Frozen Ground", year: 2013, boxOffice: 22300000, costToPurchase: 38000, multiplier: 42, purchased: false },
-        { name: "Knowing", year: 2009, boxOffice: 183500000, costToPurchase: 35000, multiplier: 40, purchased: false },
-        { name: "Left Behind", year: 2014, boxOffice: 27700000, costToPurchase: 35000, multiplier: 35, purchased: false },
-        { name: "The Family Man", year: 2000, boxOffice: 124300000, costToPurchase: 30000, multiplier: 33, purchased: false },
-        { name: "Between Worlds", year: 2018, boxOffice: 12000, costToPurchase: 25000, multiplier: 30, purchased: false },
-        { name: "Bringing Out the Dead", year: 1999, boxOffice: 28600000, costToPurchase: 20000, multiplier: 28, purchased: false },
-        { name: "The Rocketeer", year: 1991, boxOffice: 46700000, costToPurchase: 18000, multiplier: 25, purchased: false },
-        { name: "Honeymoon in Vegas", year: 1992, boxOffice: 37500000, costToPurchase: 16000, multiplier: 22, purchased: false },
-        { name: "Trapped in Paradise", year: 1994, boxOffice: 9100000, costToPurchase: 15000, multiplier: 20, purchased: false },
-        { name: "Red Rock West", year: 1993, boxOffice: 2400000, costToPurchase: 900, multiplier: 16, purchased: false },
-        { name: "Kiss of Death", year: 1995, boxOffice: 29600000, costToPurchase: 888, multiplier: 16, purchased: false },
-        { name: "Peggy Sue Got Married", year: 1986, boxOffice: 40400000, costToPurchase: 800, multiplier: 15, purchased: false },
-        { name: "Vampire's Kiss", year: 1988, boxOffice: 1200000, costToPurchase: 750, multiplier: 14, purchased: false },
-        { name: "Rumble Fish", year: 1983, boxOffice: 2500000, costToPurchase: 700, multiplier: 14, purchased: false },
-        { name: "Rage", year: 2014, boxOffice: 11300000, costToPurchase: 600, multiplier: 13, purchased: false },
-        { name: "The Bad Lieutenant: Port of Call New Orleans", year: 2009, boxOffice: 10700000, costToPurchase: 500, multiplier: 12, purchased: false },
-        { name: "Tales from the Crypt: Demon Knight", year: 1995, boxOffice: 21600000, costToPurchase: 400, multiplier: 10, purchased: false },
-        { name: "Outcast", year: 2014, boxOffice: 1500000, costToPurchase: 75, multiplier: 3, purchased: false },
-        { name: "Primal", year: 2019, boxOffice: 1800000, costToPurchase: 50, multiplier: 3, purchased: false },
-        { name: "The Humanity Bureau", year: 2017, boxOffice: 7000, costToPurchase: 30, multiplier: 2, purchased: false }
-    ];
-
     let totalDollars = 0;
     const button = document.getElementById('myButton');
     const counterDisplay = document.getElementById('counter');
@@ -176,7 +127,6 @@
                 <tr ${movie.purchased ? 'class="purchased"' : ''}>
                     <td>${movie.name}</td>
                     <td>${movie.year}</td>
-                    <td>${formatMoney(movie.boxOffice)}</td>
                     <td>${formatMoney(movie.costToPurchase)}</td>
                     <td>${movie.multiplier.toLocaleString()}x</td>
                     <td>
