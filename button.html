@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nick Cage Button with Random Images</title>
+    <title>Nick Cage Button with Random Images and Movie List</title>
     <style>
         body {
             display: flex;
@@ -20,10 +20,10 @@
             align-items: center;
         }
         #myButton {
-            width: 300px;
-            height: 300px;
+            width: 300px; /* Increased width */
+            height: 300px; /* Increased height */
             border: none;
-            border-radius: 50%;
+            border-radius: 50%; /* Keeps it circular */
             background-size: cover;
             background-position: center;
             cursor: pointer;
@@ -41,13 +41,32 @@
             font-size: 24px;
             font-weight: bold;
         }
+        #movieList {
+            margin-top: 20px;
+            list-style-type: none;
+            padding: 0;
+        }
+        #movieList li {
+            margin: 5px 0;
+            display: flex;
+            align-items: center;
+        }
+        #movieList input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        #movieList label {
+            font-size: 18px;
+        }
     </style>
 </head>
 <body>
 <div id="container">
     <button id="myButton" aria-label="Nick Cage Button"></button>
     <div id="counter">Clicks: 0</div>
+    <ul id="movieList">
+        <!-- Movie list items will be added here -->
+    </ul>
 </div>
-<script src="randomcageimage.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
