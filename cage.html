@@ -195,12 +195,10 @@
     function checkPurchases() {
         movieData.forEach((movie, index) => {
             if (totalDollars >= movie.costToPurchase && !movie.purchased) {
-                totalDollars -= movie.costToPurchase;
                 movie.purchased = true;
                 showPurchaseNotification(movie.name);
             }
         });
-        counterDisplay.textContent = `Total Dollars: ${formatMoney(totalDollars)}`;
         updateTable();
     }
 
@@ -224,7 +222,6 @@
         totalDollars += totalIncrease;
         counterDisplay.textContent = `Total Dollars: ${formatMoney(totalDollars)}`;
         checkPurchases();
-        updateTable();
     });
 
     // Initial table setup
