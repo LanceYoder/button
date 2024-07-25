@@ -34,12 +34,11 @@
             height: 200px;
             border: none;
             border-radius: 50%;
-            background-image: url('images/1.jpg');
             background-size: cover;
             background-position: center;
             cursor: pointer;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: box-shadow 0.3s;
+            transition: box-shadow 0.3s, background-image 0.3s;
         }
         #myButton:hover {
             box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
@@ -249,16 +248,23 @@
         return baseClickValue * calculateMultiplier();
     }
 
+    function changeButtonImage() {
+        const randomNumber = Math.floor(Math.random() * 7) + 1;
+        button.style.backgroundImage = `url('images/${randomNumber}.jpg')`;
+    }
+
     button.addEventListener('click', function() {
         const clickValue = calculateClickValue();
         totalDollars += clickValue;
         counterDisplay.textContent = `Total Dollars: ${formatMoney(totalDollars)}`;
         updateTable();
+        changeButtonImage();
     });
 
     // Initial setup
     updateTable();
     updateMultiplierDisplay();
+    changeButtonImage();
 </script>
 </body>
 </html>
