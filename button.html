@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Single Button App</title>
+    <title>Nick Cage Button with Counter</title>
     <style>
         body {
             display: flex;
@@ -12,33 +12,51 @@
             height: 100vh;
             margin: 0;
             background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
         }
-        button {
-            padding: 20px 40px;
-            font-size: 24px;
-            cursor: pointer;
+        #container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #myButton {
+            width: 200px;
+            height: 200px;
             border: none;
-            border-radius: 10px;
-            background-color: #007bff;
-            color: white;
+            border-radius: 50%;
+            background-image: url('images/1.jpg');
+            background-size: cover;
+            background-position: center;
+            cursor: pointer;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s, box-shadow 0.3s;
+            transition: box-shadow 0.3s;
         }
-        button:hover {
-            background-color: #0056b3;
+        #myButton:hover {
             box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
         }
-        button:active {
-            background-color: #004494;
+        #myButton:active {
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        #counter {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-<button id="myButton">Nick Cage!</button>
+<div id="container">
+    <button id="myButton" aria-label="Nick Cage Button"></button>
+    <div id="counter">Clicks: 0</div>
+</div>
 <script>
-        document.getElementById('myButton').addEventListener('click', function() {
-            alert('Button clicked!');
+        let clickCount = 0;
+        const button = document.getElementById('myButton');
+        const counterDisplay = document.getElementById('counter');
+
+        button.addEventListener('click', function() {
+            clickCount++;
+            counterDisplay.textContent = `Clicks: ${clickCount}`;
         });
     </script>
 </body>
