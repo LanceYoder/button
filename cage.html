@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nick Cage Movie Purchaser</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        #container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #myButton {
+            width: 200px;
+            height: 200px;
+            border: none;
+            border-radius: 50%;
+            background-image: url('images/1.jpg');
+            background-size: cover;
+            background-position: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s;
+        }
+        #myButton:hover {
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+        }
+        #myButton:active {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        #counter {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .progress-bar {
+            width: 100%;
+            background-color: #e0e0e0;
+            padding: 3px;
+            border-radius: 3px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, .2);
+        }
+        .progress {
+            display: block;
+            height: 22px;
+            background-color: #659cef;
+            border-radius: 3px;
+            transition: width 500ms ease-in-out;
+        }
+        .purchased {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div id="container">
+    <button id="myButton" aria-label="Nick Cage Button"></button>
+    <div id="counter">Total Dollars: $0</div>
+</div>
+<table id="movieTable">
+    <thead>
+        <tr>
+            <th>Movie</th>
+            <th>Box Office</th>
+            <th>Multiplier</th>
+            <th>Progress</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Movie rows will be inserted here -->
+    </tbody>
+</table>
+<script>
+    const movieData = [
+        { name: "Deadfall (1993)", boxOffice: 18369, multiplier: 1.0, purchased: false },
+        { name: "Zandalee (1991)", boxOffice: 55322, multiplier: 1.1, purchased: false },
+        { name: "Left Behind (2014)", boxOffice: 27400000, multiplier: 1.2, purchased: false },
+        { name: "Next (2007)", boxOffice: 76100000, multiplier: 1.3, purchased: false },
+        { name: "Ghost Rider: Spirit of Vengeance (2011)", boxOffice: 132600000, multiplier: 1.4, purchased: false },
+        { name: "The Weather Man (2005)", boxOffice: 19000000, multiplier: 1.5, purchased: false },
+        { name: "The Trust (2016)", boxOffice: 320000, multiplier: 1.6, purchased: false },
+        { name: "Lord of War (2005)", boxOffice: 72600000, multiplier: 1.7, purchased: false },
+        { name: "Mandy (2018)", boxOffice: 1400000, multiplier: 1.8, purchased: false },
+        { name: "The Sorcerer's Apprentice (2010)", boxOffice: 215300000, multiplier: 1.9, purchased: false },
+        { name: "National Treasure: Book of Secrets (2007)", boxOffice: 459200000, multiplier: 2.0, purchased: false },
+        { name: "Con Air (1997)", boxOffice: 224000000, multiplier: 2.1, purchased: false },
+        { name: "Face/Off (1997)", boxOffice: 245700000, multiplier: 2.2, purchased: false },
+        { name: "National Treasure (2004)", boxOffice: 347500000, multiplier: 2.3, purchased: false },
+        { name: "Gone in 60 Seconds (2000)", boxOffice: 237200000, multiplier: 2.4, purchased: false }
+    ];
+
+    let totalDollars = 0;
+    const button = document.getElementById('myButton');
+    const counterDisplay = document.getElementById('counter');
+    const tableBody = document.querySelector('#movieTable tbody');
+
+    function formatMoney(amount) {
+        return '$' + amount.toLocaleString();
+    }
+
+    function calculateProgress(current, total) {
+        return Math.min((Math.log(current + 1) / Math.log(total)) * 100, 100);
+    }
+
+    function updateTable() {
+        tableBody.innerHTML = '';
+        movieData.forEach((movie, index) => {
+            const progress = calculateProgress(totalDollars, movie.boxOffice);
+            const row = `
+                <tr ${movie.purchased ? 'class="purchased"' : ''}>
+                    <td>${movie.name}</td>
+                    <td>${formatMoney(movie.boxOffice)}</td>
+                    <td>${movie.multiplier.toFixed(1)}x</td>
+                    <td>
+                        <div class="progress-bar">
+                            <span class="progress" style="width: ${progress}%"></span>
+                        </div>
+                        ${progress.toFixed(2)}%
+                    </td>
+                    <td>${movie.purchased ? 'Purchased' : 'Not Purchased'}</td>
+                </tr>
+            `;
+            tableBody.insertAdjacentHTML('beforeend', row);
+        });
+    }
+
+    function checkPurchases() {
+        movieData.forEach((movie, index) => {
+            if (totalDollars >= movie.boxOffice && !movie.purchased) {
+                totalDollars -= movie.boxOffice;
+                movie.purchased = true;
+                alert(`Congratulations! You've purchased "${movie.name}"!`);
+            }
+        });
+        counterDisplay.textContent = `Total Dollars: ${formatMoney(totalDollars)}`;
+        updateTable();
+    }
+
+    button.addEventListener('click', function() {
+        const baseIncrease = 100000; // Base increase of $100,000 per click
+        let totalIncrease = 0;
+        
+        movieData.forEach(movie => {
+            if (!movie.purchased) {
+                totalIncrease += baseIncrease * movie.multiplier;
+            }
+        });
+        
+        totalDollars += Math.floor(totalIncrease);
+        counterDisplay.textContent = `Total Dollars: ${formatMoney(totalDollars)}`;
+        checkPurchases();
+        updateTable();
+    });
+
+    // Initial table setup
+    updateTable();
+</script>
+</body>
+</html>
